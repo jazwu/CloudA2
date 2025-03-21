@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  flask_app:
+    build:
+      context: .
+      dockerfile: Dockerfile  # Flask Dockerfile
+    environment:
+      - FLASK_ENV=development
+      - PORT=5000
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+    ports:
+      - "3000:5000"
+    depends_on:
+      - mongodb  # Flask app depends on MongoDB
+    volumes:
+      - .:/app
+  
+  mongodb:
+    image: mongo:latest  # Or you can use Dockerfile.mongo if you've built one
+    volumes:
+      - mongodb-data:/data/db
+    ports:
+      - "27017:27017"
+  
+volumes:
+  mongodb-data:
+    driver: local

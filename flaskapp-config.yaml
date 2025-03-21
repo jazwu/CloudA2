@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flaskapp-config
+data:
+  mongo-host: mongodb
+  mongo-port: "27107"
+  flask-env: development
+  flask-port: "5000"
