@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: flaskapp-liveness-readiness
+  labels:
+    app: flaskapp
+spec:
+  containers:
+  - name: flaskapp
+    image: jsmn3/cloud-assignment2:v2
+    ports:
+    - containerPort: 5000
+    readinessProbe:
+      tcpSocket:
+        port: 5000
+      initialDelaySeconds: 15
+      periodSeconds: 10
+    livenessProbe:
+      tcpSocket:
+        port: 5000
+      initialDelaySeconds: 15
+      periodSeconds: 10
