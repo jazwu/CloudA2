@@ -5,7 +5,7 @@ metadata:
   labels:
     app: flaskapp
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: flaskapp
@@ -46,11 +46,11 @@ kind: Service
 metadata:
   name: flaskapp-service
 spec:
-  type: NodePort # (NodePort) Expose the service to the outside world (defualt is ClusterIP, which is only accessible within the cluster)
+  type: LoadBalancer
   selector:
     app: flaskapp
   ports:
     - protocol: TCP
       port: 5000
       targetPort: 5000
-      nodePort: 30111
+      nodePort: 30100
