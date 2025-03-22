@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flaskapp-deployment
+  labels:
+    app: flaskapp
+spec:
+  replicas: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: flaskapp
+  template:
+    metadata:
+      labels:
+        app: flaskapp
+    spec:
+      containers:
+      - name: flaskapp
+        image: jsmn3/cloud-assignment2:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: mongo-config
+              key: mongo-host
+        - name: MONGO_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: mongo-config
+              key: mongo-port
+        - name: FLASK_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: flaskapp-config
+              key: flask-env
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: flaskapp-config
+              key: flask-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flaskapp-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: flaskapp
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 5000
+      nodePort: 30100
